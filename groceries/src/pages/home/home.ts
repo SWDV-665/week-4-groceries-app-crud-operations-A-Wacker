@@ -4,6 +4,7 @@ import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { GroceriesServiceProvider } from '../../providers/groceries-service/groceries-service';
 import { InputDialogServiceProvider } from '../../providers/input-dialog-service/input-dialog-service';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class HomePage {
 
   title = "Grocery";
   
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public alertCtrl: AlertController, public dataService: GroceriesServiceProvider, public inputDialogService: InputDialogServiceProvider) {
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public alertCtrl: AlertController, public dataService: GroceriesServiceProvider, public inputDialogService: InputDialogServiceProvider, public socialSharing: SocialSharing) {
 
   }
 
@@ -35,6 +36,23 @@ editItem(item, index) {
   toast.present();
 
   this.inputDialogService.showPrompt(item, index);
+}
+
+shareItem(item) {
+  const toast = this.toastCtrl.create({
+    message: "Sharing " + item.name,
+    duration: 3000
+  });
+
+  toast.present();
+
+  let msg = "Grocery Item - Name: " + item.name + " - Quantity: " + item.quantity;
+  let subject = "Shared via Groceries app";
+  this.socialSharing.share(msg, subject).then(() => {
+    console.log("Sharing item ", item.name);
+  }).catch((error) => {
+    console.error("Error while sharing", error);
+  });
 }
 
 removeItem(item, index) {

@@ -40,7 +40,7 @@ export class InputDialogServiceProvider {
           }
         },
         {
-          text: 'Add',
+          text: item ? 'Save' : 'Add',
           handler: item => {
             if (index !== undefined) {
               this.dataService.editItem(item, index);
